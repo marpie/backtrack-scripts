@@ -6,7 +6,7 @@
 
     Author: marpie (marpie@a12d404.net)
 
-    Last Update: 20120322
+    Last Update: 20120414
     Created:     20120322
 
 """
@@ -63,6 +63,7 @@ SELF_UPDATING = {
         'OpenVAS': ('', 'openvas-nvt-sync'),
         'fimap': ('', '/pentest/web/fimap/fimap.py --update-def'),
         'Nmap OS Detection DB': ('/usr/local/share/nmap', 'wget http://nmap.org/svn/nmap-os-db -O nmap-os-db',),
+        'Nmap Services DB': ('/usr/local/share/nmap', 'wget http://nmap.org/svn/nmap-os-db -O nmap-services',),
 }
 
 
