@@ -63,7 +63,7 @@ SELF_UPDATING = {
         'OpenVAS': ('', 'openvas-nvt-sync'),
         'fimap': ('', '/pentest/web/fimap/fimap.py --update-def'),
         'Nmap OS Detection DB': ('/usr/local/share/nmap', 'wget http://nmap.org/svn/nmap-os-db -O nmap-os-db',),
-        'Nmap Services DB': ('/usr/local/share/nmap', 'wget http://nmap.org/svn/nmap-services-O nmap-services',),
+        'Nmap Services DB': ('/usr/local/share/nmap', 'wget http://nmap.org/svn/nmap-services -O nmap-services',),
 }
 
 
