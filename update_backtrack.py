@@ -6,7 +6,7 @@
 
     Author: marpie (marpie@a12d404.net)
 
-    Last Update: 20120414
+    Last Update: 20120807
     Created:     20120322
 
 """
@@ -59,7 +59,7 @@ VCS = { '.hg': "hg pull -u",
 SELF_UPDATING = {
         # Name:       (Path, Command,)
         'Metasploit': ('', 'msfupdate',),
-        'OWASP Joomla! Vulnerability Scanner': ('', '/pentest/web/scanners/joomscan/joomscan.pl update',),
+        'OWASP Joomla! Vulnerability Scanner': ('/pentest/web/joomscan', '/pentest/web/joomscan/joomscan.pl update',),
         'OpenVAS': ('', 'openvas-nvt-sync'),
         'fimap': ('', '/pentest/web/fimap/fimap.py --update-def'),
         'Nmap OS Detection DB': ('/usr/local/share/nmap', 'wget http://nmap.org/svn/nmap-os-db -O nmap-os-db',),
@@ -69,9 +69,7 @@ SELF_UPDATING = {
 
 
 def main(argv):
-    if len(argv) < 2:
-        print("Using default directories.")
-        dirs = DEFAULT_DIRS
+    dirs = DEFAULT_DIRS
 
     print("[*] Searching for VCS directories...")
     resultList = []
