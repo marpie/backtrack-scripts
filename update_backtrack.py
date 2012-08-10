@@ -6,7 +6,7 @@
 
     Author: marpie (marpie@a12d404.net)
 
-    Last Update: 20120807
+    Last Update: 20120810
     Created:     20120322
 
 """
@@ -119,6 +119,11 @@ SELF_UPDATING = {
 def main(argv):
     dirs = DEFAULT_DIRS
 
+    print("[*] Running apt-get update, upgrade, dist-upgrade...")
+    if not(runProg("apt-get", "update") and runProg("apt-get", "upgrade") and runProg("apt-get", "dist-upgrade")):
+        print("[E] Error while updating system...")
+        raw_input("\nPress [Enter] to continue...")
+
     print("[*] Searching for VCS directories...")
     resultList = []
     for dEntry in dirs:
@@ -141,12 +146,11 @@ def main(argv):
     if not update_exploitdb("/pentest/exploits/exploitdb"):
         print("Error while updating exploit-db!")
     
-    print("All updates completed. Please run 'apt-get update && apt-get upgrade && apt-get dist-upgrade' now.")
+    print("All updates completed.")
     return True
 
 if __name__ == "__main__":
     import sys
     print(__doc__)
     sys.exit(not main(sys.argv))
-
 
