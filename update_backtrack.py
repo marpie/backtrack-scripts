@@ -11,8 +11,12 @@
 
 """
 from os import listdir, getcwd, chdir
-from os.path import join, isdir
+from os.path import join, isdir, isfile
 from subprocess import call
+from bz2 import decompress
+from cStringIO import StringIO
+import tarfile
+import httplib
 
 def updateGit(targetDir):
     return runProgInDir("git", "pull", targetDir)
@@ -45,6 +49,50 @@ def get_repositories(baseDir, resultList):
                 isRepo = True
         if not isRepo:
             get_repositories(fullPath, resultList)
+
+def update_exploitdb(directory):
+    print("[U] Exploits Database by Offensive Security (exploit-db.com)")
+    lastUpdate = None
+    updateFile = join(directory, "last_update")
+    if isfile(updateFile):
+        with open(updateFile, "r") as f:
+            lastUpdate = f.readline().strip()
+        if len(lastUpdate) < 5:
+            lastUpdate = None
+
+    # checking current version
+    print("[*] Checking current version...")
+    http = httplib.HTTPConnection("www.exploit-db.com")
+    http.request("HEAD", "/archive.tar.bz2")
+    resp = http.getresponse()
+    currentVersion = resp.getheader('last-modified').strip()
+    resp.read()
+
+    if lastUpdate != currentVersion:
+        print("[!] new version available (" + currentVersion + ")")
+        print("    loading new version...")
+        http.request("GET", "/archive.tar.bz2")
+        currentCompressed = http.getresponse().read()
+        if not currentCompressed:
+            print("[E] No data received from server!")
+            return False
+        currentUnpacked = decompress(currentCompressed)
+        if not currentUnpacked:
+            print("[E] Couldn't unpack bz2 data!")
+            return False
+        # extract archive
+        tar = tarfile.open(fileobj=StringIO(currentUnpacked))
+        tar.extractall(directory)
+        tar.close()
+        with open(updateFile, "w") as f:
+            f.write(currentVersion)
+        print("[X] exploit-db updated to version: " + currentVersion)
+        return True
+    else:
+        print("[X] You already got the newest version! No update necessary.")
+        return True
+    print("[E] UNKNOWN ERROR!")
+    return False
 
 #
 # VARs
@@ -88,6 +136,10 @@ def main(argv):
     for name in SELF_UPDATING.keys():
         print("[U] Updating " + name)
         runProgInDir(SELF_UPDATING[name][1], "", SELF_UPDATING[name][0])
+
+    # update exploit-db.com
+    if not update_exploitdb("/pentest/exploits/exploitdb"):
+        print("Error while updating exploit-db!")
     
     print("All updates completed. Please run 'apt-get update && apt-get upgrade && apt-get dist-upgrade' now.")
     return True
