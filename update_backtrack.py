@@ -143,8 +143,8 @@ def main(argv):
         runProgInDir(SELF_UPDATING[name][1], "", SELF_UPDATING[name][0])
 
     # update exploit-db.com
-    if not update_exploitdb("/pentest/exploits/exploitdb"):
-        print("Error while updating exploit-db!")
+    #if not update_exploitdb("/pentest/exploits/exploitdb"):
+    #    print("Error while updating exploit-db!")
     
     print("All updates completed.")
     return True
