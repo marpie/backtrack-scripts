@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# fix-chromium - Changes the chromium binary to run as root
+#
+# 20130317
+#
+
+sed -i 's/geteuid/getppid/g' /usr/lib/chromium/chromium && echo "Done."
